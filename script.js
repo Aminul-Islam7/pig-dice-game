@@ -31,8 +31,7 @@ const updateCurrentScore = function () {
 	document.getElementById(`current-${activePlayer}`).textContent = currentScore;
 };
 
-// Rolling dice
-btnRollElement.addEventListener('click', function () {
+const rollDice = function () {
 	if (gameOver) return;
 
 	// Generate a random dice roll
@@ -49,10 +48,9 @@ btnRollElement.addEventListener('click', function () {
 		currentScore += dice;
 		updateCurrentScore();
 	}
-});
+};
 
-// Holding scores
-btnHoldElement.addEventListener('click', function () {
+const holdScore = function () {
 	if (gameOver) return;
 
 	// Update score
@@ -66,10 +64,9 @@ btnHoldElement.addEventListener('click', function () {
 		document.querySelector(`.player-${activePlayer}`).classList.add('player-winner');
 		document.querySelector(`.player-${activePlayer}`).classList.remove('player-active');
 	} else switchPlayers();
-});
+};
 
-// Resetting the game
-btnNewElement.addEventListener('click', function () {
+const resetGame = function () {
 	gameOver = false;
 	document.querySelector(`.player-${activePlayer}`).classList.remove('player-winner');
 
@@ -89,5 +86,17 @@ btnNewElement.addEventListener('click', function () {
 	player2Element.querySelector('.score').textContent = 0;
 
 	diceElement.classList.add('hidden');
+};
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function (e) {
+	if (e.key == 'ArrowUp') rollDice();
+	else if (e.key == 'ArrowDown') holdScore();
+	else if (e.key.toUpperCase() == 'R') resetGame();
 });
+
+// Mouse click actions
+btnRollElement.addEventListener('click', rollDice);
+btnHoldElement.addEventListener('click', holdScore);
+btnNewElement.addEventListener('click', resetGame);
 
