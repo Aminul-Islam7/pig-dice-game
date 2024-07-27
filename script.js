@@ -1,6 +1,8 @@
 'use strict';
 
 // Select elements
+const player1Element = document.querySelector('.player-1');
+const player2Element = document.querySelector('.player-2');
 const diceElement = document.querySelector('.dice');
 const btnNewElement = document.querySelector('.btn-new');
 const btnRollElement = document.querySelector('.btn-roll');
@@ -21,8 +23,8 @@ const switchPlayers = function () {
 	currentScore = 0;
 	updateCurrentScore();
 	activePlayer = activePlayer === 1 ? 2 : 1;
-	document.querySelector('.player-1').classList.toggle('player-active');
-	document.querySelector('.player-2').classList.toggle('player-active');
+	player1Element.classList.toggle('player-active');
+	player2Element.classList.toggle('player-active');
 };
 
 const updateCurrentScore = function () {
@@ -53,14 +55,39 @@ btnRollElement.addEventListener('click', function () {
 btnHoldElement.addEventListener('click', function () {
 	if (gameOver) return;
 
+	// Update score
 	score[activePlayer] += currentScore;
 	document.getElementById(`score-${activePlayer}`).textContent = score[activePlayer];
 
+	// Active player wins the game
 	if (score[activePlayer] >= 100) {
 		gameOver = true;
 		diceElement.classList.add('hidden');
 		document.querySelector(`.player-${activePlayer}`).classList.add('player-winner');
 		document.querySelector(`.player-${activePlayer}`).classList.remove('player-active');
 	} else switchPlayers();
+});
+
+// Resetting the game
+btnNewElement.addEventListener('click', function () {
+	gameOver = false;
+	document.querySelector(`.player-${activePlayer}`).classList.remove('player-winner');
+
+	currentScore = 0;
+	updateCurrentScore();
+
+	score = {
+		1: 0,
+		2: 0,
+	};
+
+	activePlayer = 1;
+	player1Element.classList.add('player-active');
+	player2Element.classList.remove('player-active');
+
+	player1Element.querySelector('.score').textContent = 0;
+	player2Element.querySelector('.score').textContent = 0;
+
+	diceElement.classList.add('hidden');
 });
 
